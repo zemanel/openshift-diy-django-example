@@ -187,4 +187,4 @@ override_settings('petstore.local_settings')
 # Import openshift settings
 OPENSHIFT_APP_NAME = os.environ.get('OPENSHIFT_APP_NAME', None)
 if OPENSHIFT_APP_NAME is not None:
-    override_settings('deploy.settings.' + OPENSHIFT_APP_NAME)
+    override_settings('petstore.deploy.settings.' + OPENSHIFT_APP_NAME)
