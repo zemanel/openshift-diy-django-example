@@ -1,0 +1,20 @@
+## pip project requirements
+
+# core project
+
+Django==1.4
+psycopg2==2.4.1
+South==0.7.4
+
+# general
+gunicorn==0.14.2
+sorl-thumbnail==11.12
+
+# async tasks
+
+celery-with-mongodb==2.5
+django-celery-email==1.0.3
+
+# helper tools
+pytz
+django-extensions==0.8
