@@ -1,6 +1,9 @@
 # Django settings for petstore project.
 import warnings
 import djcelery
+import os
+import sys
+from django.utils.importlib import import_module
 
 djcelery.setup_loader()
 
@@ -163,7 +166,25 @@ LOGGING = {
     }
 }
 
-try:
-    from .local_settings import *
-except:
-    warnings.warn("Failed to import local_settings.py")
+def override_settings(dottedpath):
+    """Imports uppercase modules from an string based module.
+    Example:
+        override_settings('my.module.settings')
+    """
+    try:
+        _m = import_module(dottedpath)
+    except ImportError:
+        warnings.warn("Failed to import %s" % dottedpath) # <-- will show up in your error log
+    else:
+        _thismodule = sys.modules[__name__]
+        for _k in dir(_m): # <-- moved the block inside else
+            if _k.isupper() and not _k.startswith('__'): setattr(_thismodule,
+                _k, getattr(_m, _k))
+            
+# Import local settings
+override_settings('petstore.local_settings')
+
+# Import openshift settings
+OPENSHIFT_APP_NAME = os.environ.get('OPENSHIFT_APP_NAME', None)
+if OPENSHIFT_APP_NAME is not None:
+    override_settings('deploy.settings.' + OPENSHIFT_APP_NAME)
