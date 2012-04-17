@@ -19,6 +19,6 @@ $GUNICORN_BIN $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT \
     --daemon \
     --workers=$WORKERS \
     --pid=$PIDFILE \
-    --log-file=$LOGFILE \ 
-    --access-logfile $ACCESS_LOGFILE \ 
+    --log-file=$LOGFILE \
+    --access-logfile $ACCESS_LOGFILE \
     --log-level=info
