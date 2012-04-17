@@ -2,10 +2,10 @@
 <html lang="en">
   <head>
   <meta charset="utf-8">
-  <title>Bootstrap, from Twitter</title>
+  <title>Django on Openshift DIY</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <meta name="description" content="A Django 1.4 example project for deployment on Openshift">
+  <meta name="author" content="José Moreira">
 
   <!-- Le styles -->
   <link href="{{ STATIC_URL }}css/bootstrap.css" rel="stylesheet">
@@ -56,6 +56,7 @@
       <ul>
         <li>Django 1.4</li>
         <li>'django.contrib.staticfiles' support</li>
+        <li>Pip</li>
         <li>South</li>
         <li>MongoDB (caching and Celery support ~ work in progress)</li>
         <li>Gunicorn</li>
@@ -67,8 +68,7 @@
     
     <p>The end goal is to manage the application with Supervisord, including the gunicorn and celeryd processes
         but that is not currently posssible due to the lack of shared memory support</p>
-    
-    
+
   </div> <!-- /container -->
 
   <!-- Javascript -->
