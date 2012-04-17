@@ -6,7 +6,7 @@
 
 virtualenv --no-site-packages --clear $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME
 
-source ${OPENSHIFT_DATA_DIR}/${OPENSHIFT_APP_NAME}bin/activate
+source ${OPENSHIFT_DATA_DIR}/${OPENSHIFT_APP_NAME}/bin/activate
 
 export PIP_DOWNLOAD_CACHE=${OPENSHIFT_TMP_DIR}.pip/cache
 
