@@ -3,3 +3,20 @@
 # build hook has been run but before the application has been started back
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
+
+virtualenv --no-site-packages --clear $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME
+
+source ${OPENSHIFT_DATA_DIR}/${OPENSHIFT_APP_NAME}/bin/activate
+
+export PIP_DOWNLOAD_CACHE=${OPENSHIFT_TMP_DIR}.pip/cache
+
+pip install --log=${OPENSHIFT_TMP_DIR}.pip/pip.log -r ${OPENSHIFT_REPO_DIR}requirements.txt
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput'"
+python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py migrate'"
+python ${OPENSHIFT_REPO_DIR}manage.py migrate
+
+echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput'"
+python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput
