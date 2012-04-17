@@ -1,6 +1,6 @@
 #!/bin/bash
 # The logic to stop your application should be put in this script.
-PIDFILE=$OPENSHIFT_DATA_DIR/gunicorn.pid
+PIDFILE=${OPENSHIFT_DATA_DIR}gunicorn.pid
 if [ -f $PIDFILE ]; then
     PID=`cat $PIDFILE`
     rm $PIDFILE

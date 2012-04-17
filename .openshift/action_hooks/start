@@ -3,8 +3,22 @@
 # script. The application will work only if it binds to
 # $OPENSHIFT_INTERNAL_IP:8080
 
-source $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME/bin/activate
+source ${OPENSHIFT_DATA_DIR}${OPENSHIFT_APP_NAME}/bin/activate
+
+# gunicorn config
+
+GUNICORN_BIN="python ${OPENSHIFT_REPO_DIR}manage.py run_gunicorn"
 WORKERS=3
-LOGFILE=$OPENSHIFT_LOG_DIR/gunicorn.log
-PIDFILE=$OPENSHIFT_DATA_DIR/gunicorn.pid
-python $OPENSHIFT_REPO_DIR/diy/manage.py run_gunicorn $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT --daemon --workers=$WORKERS --pid=$PIDFILE --log-file=$LOGFILE --log-level=info
+LOGFILE=${OPENSHIFT_LOG_DIR}gunicorn_out.log
+ACCESS_LOGFILE=${OPENSHIFT_LOG_DIR}gunicorn_access.log
+PIDFILE=${OPENSHIFT_DATA_DIR}gunicorn.pid
+
+# Execute gunicorn daemon
+
+$GUNICORN_BIN $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT \
+    --daemon \
+    --workers=$WORKERS \
+    --pid=$PIDFILE \
+    --log-file=$LOGFILE \
+    --access-logfile $ACCESS_LOGFILE \
+    --log-level=info
