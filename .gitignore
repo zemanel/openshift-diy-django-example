@@ -1,3 +1,4 @@
+*.pyc
 local_settings.py
 petstore/public/static/*
 petstore/public/media/*
