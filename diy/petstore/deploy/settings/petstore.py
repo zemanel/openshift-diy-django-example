@@ -1,6 +1,8 @@
 """"""
 import os
 
+DEBUG = False
+
 BROKER_URL = os.environ['OPENSHIFT_NOSQL_DB_URL']
 
 TIME_ZONE = 'UTC'
