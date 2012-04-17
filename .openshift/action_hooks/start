@@ -7,4 +7,4 @@ source $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME/bin/activate
 WORKERS=3
 LOGFILE=$OPENSHIFT_LOG_DIR/gunicorn.log
 PIDFILE=$OPENSHIFT_DATA_DIR/gunicorn.pid
-python $OPENSHIFT_REPO_DIR/diy/manage.py run_gunicorn $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT --workers=$WORKERS --pid=$PIDFILE --log-file=$LOGFILE --log-level=info
+python $OPENSHIFT_REPO_DIR/diy/manage.py run_gunicorn $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT --daemon --workers=$WORKERS --pid=$PIDFILE --log-file=$LOGFILE --log-level=info
