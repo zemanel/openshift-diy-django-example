@@ -7,6 +7,7 @@ psycopg2==2.4.1
 South==0.7.4
 
 # general
+unipath==0.2.1
 gunicorn==0.14.2
 sorl-thumbnail==11.12
 

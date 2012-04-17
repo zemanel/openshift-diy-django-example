@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
@@ -14,3 +15,10 @@ urlpatterns = patterns('',
     # django admin:
     url(r'^admin/', include(admin.site.urls)),
 )
+
+if not settings.DEBUG:
+    urlpatterns += patterns('django.contrib.staticfiles.views',
+        url(r'^static/(?P<path>.*)$', 'serve', {'document_root':settings.STATIC_ROOT, 'insecure':True} ),
+        url(r'^media/(?P<path>.*)$', 'serve', {'document_root':settings.MEDIA_ROOT, 'insecure':True} ),
+    )
+
