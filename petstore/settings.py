@@ -1,20 +1,16 @@
-# Django settings for petstore project.
-import warnings
-import djcelery
-import os
-import sys
-from django.utils.importlib import import_module
+"""
+Main Django settings.
+"""
+
 from unipath import FSPath as Path
 
-djcelery.setup_loader()
+PROJECT_DIR = Path(__file__).absolute().ancestor(2)
 
-PROJECT_DIR = Path(__file__).absolute().ancestor(1)
- 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+# ('Your Name', 'your_email@example.com'),
 )
 
 MANAGERS = ADMINS
@@ -30,13 +26,14 @@ DATABASES = {
     }
 }
 
+# Hosts/domain names that are valid for this site; required if DEBUG is False
+# See https://docs.djangoproject.com/en/1.4/ref/settings/#allowed-hosts
+ALLOWED_HOSTS = []
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
-# On Unix systems, a value of None will cause Django to use the same
-# timezone as the operating system.
-# If running in a Windows environment this must be set to the same as your
-# system time zone.
+# In a Windows environment this must be set to your system time zone.
 TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
@@ -58,7 +55,7 @@ USE_TZ = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = PROJECT_DIR.child('public').child('media')
+MEDIA_ROOT = PROJECT_DIR.child('var').child('media')
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -69,7 +66,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = PROJECT_DIR.child('public').child('static')
+STATIC_ROOT = PROJECT_DIR.child('var').child('static')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -77,6 +74,9 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    # Put strings here, like "/home/html/static" or "C:/www/django/static".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
     PROJECT_DIR.child('static'),
 )
 
@@ -85,17 +85,17 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-#    'django.contrib.staticfiles.finders.DefaultStorageFinder',
+    #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '0r9+2eh9b_ts2zlftea_ycnjb&amp;px5=@x5j*he@-hg&amp;tmd*7861'
+SECRET_KEY = '%2yl(*)y&amp;g464z#frqr42a%5t!c4o6vo@3nd&amp;j3&amp;9b&amp;o15gv+r'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -115,6 +115,8 @@ WSGI_APPLICATION = 'petstore.wsgi.application'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
+    # Always use forward slashes, even on Windows.
+    # Don't forget to use absolute paths, not relative paths.
     PROJECT_DIR.child('templates'),
 )
 
@@ -126,15 +128,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.admin',
-    # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
-    'south',
-    'djcelery',
-    'djcelery_email',
+    'django.contrib.admindocs',
     'gunicorn',
-    'sorl.thumbnail',
-    'django_extensions',
-
+    'south'
 )
 
 # A sample logging configuration. The only tangible logging
@@ -145,14 +141,6 @@ INSTALLED_APPS = (
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
-    'formatters': {
-        'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s'
-        },
-        'simple': {
-            'format': '%(levelname)s %(message)s'
-        },
-    },
     'filters': {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse'
@@ -163,41 +151,14 @@ LOGGING = {
             'level': 'ERROR',
             'filters': ['require_debug_false'],
             'class': 'django.utils.log.AdminEmailHandler'
-        },
-        'console':{
-            'level':'DEBUG',
-            'class':'logging.StreamHandler',
-            'formatter': 'simple'
-        },
+        }
     },
     'loggers': {
         'django.request': {
-            'handlers': ['console'],
+            'handlers': ['mail_admins'],
             'level': 'ERROR',
             'propagate': True,
-        },
-    }
+            },
+        }
 }
 
-def override_settings(dottedpath):
-    """Imports uppercase modules from an string based module.
-    Example:
-        override_settings('my.module.settings')
-    """
-    try:
-        _m = import_module(dottedpath)
-    except ImportError:
-        warnings.warn("Failed to import %s" % dottedpath) # <-- will show up in your error log
-    else:
-        _thismodule = sys.modules[__name__]
-        for _k in dir(_m): # <-- moved the block inside else
-            if _k.isupper() and not _k.startswith('__'): setattr(_thismodule,
-                _k, getattr(_m, _k))
-            
-# Import local settings
-override_settings('petstore.local_settings')
-
-# Import openshift settings
-OPENSHIFT_GEAR_NAME = os.environ.get('OPENSHIFT_GEAR_NAME', None)
-if OPENSHIFT_GEAR_NAME is not None:
-    override_settings('petstore.deploy.settings.' + OPENSHIFT_GEAR_NAME)
