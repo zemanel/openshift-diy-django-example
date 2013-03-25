@@ -4,19 +4,53 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-virtualenv --no-site-packages --clear $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME
+function msg {
+    echo "*** $1"
+}
 
-source ${OPENSHIFT_DATA_DIR}/${OPENSHIFT_APP_NAME}/bin/activate
+# create virtualenv based on requirements.txt MD5SUM
+# for not re-creating if it was not changed
+VENV_VERSION=`md5sum ${OPENSHIFT_REPO_DIR}requirements.txt | cut -d ' ' -f1`
+VENV_BASE_DIR="${OPENSHIFT_DATA_DIR}virtualenvs/"
+VENV_APP_DIR="${VENV_BASE_DIR}${VENV_VERSION}"
 
-export PIP_DOWNLOAD_CACHE=${OPENSHIFT_TMP_DIR}.pip/cache
+# create versioned virtualenvs base directory
+# activate virtualenv and install dependencies
+if [ ! -d "${VENV_BASE_DIR}" ]
+then
+	mkdir "${VENV_BASE_DIR}"
+fi
 
-pip install --log=${OPENSHIFT_TMP_DIR}.pip/pip.log -r ${OPENSHIFT_REPO_DIR}requirements.txt
+if [ -d "${VENV_APP_DIR}" ]
+then
+	msg "Virtualenv '${VENV_APP_DIR}' is up to date!"
+	# activate virtualenv
+	source ${VENV_APP_DIR}/bin/activate
+else
+	msg "Creating new virtualenv 'VENV_APP_DIR'"
+	# remove old virtualenvs
+	rm -rf ${VENV_BASE_DIR}*
+	# create new virtualenv
+	virtualenv ${VENV_APP_DIR}
+	# activate virtualenv
+	source ${VENV_APP_DIR}/bin/activate
+	# install dependencies
+	export PIP_DOWNLOAD_CACHE=${OPENSHIFT_TMP_DIR}.pip/cache
+	pip install --log=${OPENSHIFT_TMP_DIR}.pip/pip.log -r ${OPENSHIFT_REPO_DIR}requirements.txt
+fi
 
-echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput'"
+# boot django database setup and static file collection
+export DJANGO_SETTINGS_MODULE="petstore.settings_openshift"
+
+msg "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput'"
 python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput
 
-echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py migrate'"
+msg "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py migrate'"
 python ${OPENSHIFT_REPO_DIR}manage.py migrate
+
+# prepare Django asset support
+mkdir -p ${OPENSHIFT_DATA_DIR}site_media/
+mkdir -p ${OPENSHIFT_DATA_DIR}site_static/
 
 echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput'"
 python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput
