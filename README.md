@@ -32,7 +32,8 @@ Pre deploy stage
 On every deployment, the 'deploy' hook script performs the following actions:
 
 * [re-]creates a python virtual environment on $OPENSHIFT_DATA_DIR/venv and activates it
-* installs a pip requirements file named 'requirements.txt' which is located on the root of the repo
+* installs a pip requirements file named 'requirements.txt' which is located on the root of the repo.
+The virtualenv is versioned based on the requirements.txt MD5, to speed up deployments
 * runs the 'syncdb', 'migrate' and 'collectstatic' django commands
 * Pip downloads are cached on the '${OPENSHIFT_TMP_DIR}.pip/cache' folder
 * the 'start' hook script runs gunicorn as a daemon, binded on $OPENSHIFT_INTERNAL_IP:$OPENSHIFT_INTERNAL_PORT,
