@@ -40,4 +40,21 @@ with a pid file written to '${OPENSHIFT_DATA_DIR}gunicorn.pid', which is then us
 * there are separated stdout and access logs, outputted to $OPENSHIFT_LOG_DIR  
     
 
+Developing locally
+------------------
+
+A *settings_localdev.py* module has *out of the box* defaults for using local folders and an Sqlite database.
+
+It can easily be used this way:
+
+    $ export DJANGO_SETTINGS_MODULE=settings_localdev
+
+    $ dj syncdb
+
+    $ dj migrate
+
+The *settings_localdev.py* module approach can be duplicated into another module not checked into source control and
+further customized, for example.
+
+
 

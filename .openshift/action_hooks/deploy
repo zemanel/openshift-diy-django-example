@@ -26,5 +26,10 @@ python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput
 echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py migrate'"
 python ${OPENSHIFT_REPO_DIR}manage.py migrate
 
+# prepare Django asset support
+
+mkdir -p ${OPENSHIFT_DATA_DIR}site_media/
+mkdir -p ${OPENSHIFT_DATA_DIR}site_static/
+
 echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput'"
 python ${OPENSHIFT_REPO_DIR}manage.py collectstatic --clear --noinput
