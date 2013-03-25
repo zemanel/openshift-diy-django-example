@@ -8,16 +8,15 @@ Example deployment: http://petstore-zemanel.rhcloud.com
 Setting up Openshift
 --------------------
 
-Create the Openshift application
+Create the Openshift application with a DIY and Postgresql cartridge
 
-    $ rhc app create djangoexample diy-0.1
+    $ rhc app create djangoexample diy-0.1 postgresql-8.4
 
-Add Postgres cartridge
-
-    $ rhc cartridge add postgresql-8.4 --app djangoexample
 
 Merge this example source with the Openshift repo barebones source code
-
+    
+    $ cd djangoexample
+    
     $ git remote add djangoexample -m master https://github.com/zemanel/openshift-diy-django-example.git
 
     $ git pull -s recursive -X theirs djangoexample master
