@@ -4,13 +4,21 @@
 # up again.  This script gets executed directly, so it could be python, php,
 # ruby, etc.
 
-virtualenv --no-site-packages --clear $OPENSHIFT_DATA_DIR/$OPENSHIFT_APP_NAME
+# [re-]create virtualenv
 
-source ${OPENSHIFT_DATA_DIR}/${OPENSHIFT_APP_NAME}/bin/activate
+VIRTUALENV_DIR="${OPENSHIFT_DATA_DIR}venv"
+rm -rf ${VIRTUALENV_DIR}
+virtualenv ${VIRTUALENV_DIR}
 
+# activate virtualenv and install dependencies
+
+source ${VIRTUALENV_DIR}/bin/activate
 export PIP_DOWNLOAD_CACHE=${OPENSHIFT_TMP_DIR}.pip/cache
-
 pip install --log=${OPENSHIFT_TMP_DIR}.pip/pip.log -r ${OPENSHIFT_REPO_DIR}requirements.txt
+
+# boot django database setup and static file collection
+
+export DJANGO_SETTINGS_MODULE="petstore.settings_openshift"
 
 echo "Executing 'python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput'"
 python ${OPENSHIFT_REPO_DIR}manage.py syncdb --noinput

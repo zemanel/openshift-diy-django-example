@@ -3,7 +3,9 @@
 # script. The application will work only if it binds to
 # $OPENSHIFT_INTERNAL_IP:8080
 
-source ${OPENSHIFT_DATA_DIR}${OPENSHIFT_APP_NAME}/bin/activate
+VIRTUALENV_DIR="${OPENSHIFT_DATA_DIR}venv"
+source ${VIRTUALENV_DIR}/bin/activate
+export DJANGO_SETTINGS_MODULE="petstore.settings_openshift"
 
 # gunicorn config
 
