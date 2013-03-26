@@ -14,7 +14,7 @@ Create the Openshift application with a DIY and Postgresql 8.4 cartridge
 
 The app should be working out-of-the-box on
 
-    http://djangoexampletest-<YOUR NAMESPACE>.rhcloud.com
+    http://djangoexample-<YOUR NAMESPACE>.rhcloud.com
 
 
 Pre deploy stage
@@ -39,11 +39,15 @@ A *settings_localdev.py* module has *out of the box* defaults for using local fo
 
 It can easily be used this way:
 
+    $ cd djangoexample
+
     $ export DJANGO_SETTINGS_MODULE=settings_localdev
 
-    $ dj syncdb
+    $ python manage.py syncdb
 
-    $ dj migrate
+    $ python manage.py migrate
+
+    $ python manage.py runserver
 
 The *settings_localdev.py* module approach can be duplicated into another module not checked into source control and
 further customized, for example.
