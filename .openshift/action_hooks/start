@@ -14,8 +14,8 @@ export DJANGO_SETTINGS_MODULE="petstore.settings_openshift"
 
 GUNICORN_BIN="python ${OPENSHIFT_REPO_DIR}manage.py run_gunicorn"
 WORKERS=3
-LOGFILE=${OPENSHIFT_LOG_DIR}gunicorn_out.log
-ACCESS_LOGFILE=${OPENSHIFT_LOG_DIR}gunicorn_access.log
+LOGFILE=${OPENSHIFT_DIY_LOG_DIR}gunicorn_out.log
+ACCESS_LOGFILE=${OPENSHIFT_DIY_LOG_DIR}gunicorn_access.log
 PIDFILE=${OPENSHIFT_DATA_DIR}gunicorn.pid
 
 # Execute gunicorn daemon
