@@ -9,8 +9,6 @@ from unipath import FSPath as Path
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-#print PROJECT_DIR
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
