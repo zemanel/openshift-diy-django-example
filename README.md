@@ -12,7 +12,10 @@ Create the Openshift application with a DIY and Postgresql 8.4 cartridge
 
     $ rhc app create djangoexample diy-0.1 postgresql-8.4 --from-code https://github.com/zemanel/openshift-diy-django-example.git
 
-The app should be working out-of-the-box on *http://djangoexampletest-<YOUR NAMESPACE>.rhcloud.com*
+The app should be working out-of-the-box on
+
+    http://djangoexampletest-<YOUR NAMESPACE>.rhcloud.com
+
 
 Pre deploy stage
 ----------------
