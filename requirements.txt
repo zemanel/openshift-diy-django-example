@@ -10,4 +10,4 @@ doctools
 
 # devops
 
-gunicorn==0.17.2
+gunicorn==19.5.0
