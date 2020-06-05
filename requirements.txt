@@ -2,7 +2,7 @@
 
 # core project
 
-Django==1.4.5
+Django==1.11.29
 psycopg2==2.4.6
 South==0.7.6
 unipath==0.2.1
